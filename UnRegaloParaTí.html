@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feliz Día de la Primavera 🌼</title>
+<style>
+  :root{
+    --paper:#f4ecd8;
+    --paper-edge:#e7dbb8;
+    --ink:#2c3b38;
+    --ink-soft:#4a5a56;
+    --gold:#d9a441;
+    --petal:#f2c14e;
+    --petal-deep:#e0a52a;
+    --stem:#5f7a5e;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(217,164,65,.10), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(95,122,94,.12), transparent 50%),
+      var(--paper);
+    font-family:Georgia,'Iowan Old Style','Palatino Linotype',serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:clamp(1rem,4vw,3rem) 1rem;
+  }
+
+  .plate{
+    width:100%;
+    max-width:680px;
+    border:1.5px solid var(--ink);
+    outline:1px solid var(--ink);
+    outline-offset:6px;
+    padding:clamp(1.8rem,5vw,3.2rem) clamp(1.5rem,5vw,3rem) 2.6rem;
+    background:var(--paper);
+    position:relative;
+  }
+
+  .kicker{
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    text-align:center;
+    margin:0 0 1.4rem;
+    letter-spacing:.08em;
+  }
+
+  h1{
+    font-size:clamp(1.9rem,5.5vw,2.6rem);
+    line-height:1.25;
+    text-align:center;
+    margin:0 0 1rem;
+    font-weight:normal;
+    font-style:italic;
+    color:var(--ink);
+  }
+
+  p.sub{
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    font-size:.98rem;
+    line-height:1.65;
+    text-align:center;
+    max-width:42ch;
+    margin:0 auto 2.2rem;
+    color:var(--ink-soft);
+  }
+
+  .stage{
+    position:relative;
+    min-height:260px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:clamp(2px,1.4vw,10px);
+    flex-wrap:wrap;
+    border-top:1px solid var(--paper-edge);
+    border-bottom:1px solid var(--paper-edge);
+    padding:1.6rem 0 0;
+  }
+
+  .flower{
+    transform-origin:bottom center;
+    animation:rise .6s ease-out both, sway 5s ease-in-out infinite;
+    animation-delay:0s, .6s;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(24px) scale(.6); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-1.6deg); }
+    50%{ transform:rotate(1.6deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flower{ animation:none; }
+  }
+
+  .actions{
+    display:flex;
+    justify-content:center;
+    margin-top:2rem;
+  }
+
+  .grow-btn{
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    padding:.6rem 1.7rem;
+    font-size:.85rem;
+    letter-spacing:.03em;
+    cursor:pointer;
+    transition:background .18s ease, color .18s ease;
+  }
+  .grow-btn:hover{ background:var(--ink); color:var(--paper); }
+  .grow-btn:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+  .caption{
+    text-align:center;
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    margin-top:1.4rem;
+    letter-spacing:.04em;
+  }
+
+  .grow-btn:disabled{
+    opacity:.4;
+    cursor:default;
+  }
+  .grow-btn:disabled:hover{
+    background:none;
+    color:var(--ink);
+  }
+
+  .flower-wrap{
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .flower-wrap:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(44,59,56,.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:1.5rem;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:10;
+  }
+  .overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .note{
+    background:var(--paper);
+    border:1px solid var(--ink);
+    outline:1px solid var(--ink);
+    outline-offset:5px;
+    max-width:380px;
+    width:100%;
+    padding:2.2rem 1.8rem 1.8rem;
+    text-align:center;
+    transform:scale(.9) translateY(14px);
+    transition:transform .25s ease;
+  }
+  .overlay.open .note{
+    transform:scale(1) translateY(0);
+  }
+
+  .note p{
+    font-size:1.15rem;
+    line-height:1.6;
+    font-style:italic;
+    margin:0 0 1.5rem;
+    color:var(--ink);
+  }
+
+  .note button{
+    font-family:'Trebuchet MS','Segoe UI',sans-serif;
+    background:none;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    padding:.5rem 1.5rem;
+    font-size:.8rem;
+    cursor:pointer;
+  }
+  .note button:hover{ background:var(--ink); color:var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="plate">
+  <p class="kicker">21 DE SEPTIEMBRE · DÍA DE LA PRIMAVERA</p>
+  <h1>Un ramo silvestre para este día</h1>
+  <p class="sub">Que la primavera te encuentre bien, con ganas y con flores amarillas de por medio.</p>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="actions">
+    <button class="grow-btn" id="growBtn">Sembrar más flores</button>
+  </div>
+
+  <p class="caption" id="caption">5 flores en el campo</p>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="note">
+    <p id="noteText"></p>
+    <button id="closeBtn">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const growBtn = document.getElementById('growBtn');
+  const caption = document.getElementById('caption');
+  const overlay = document.getElementById('overlay');
+  const noteText = document.getElementById('noteText');
+  const closeBtn = document.getElementById('closeBtn');
+  const MAX_FLORES = 20;
+  let count = 0;
+
+  const frases = [
+    "La amistad es la primavera que no se marchita.",
+    "Gracias por ser un lugar donde siempre se puede volver.",
+    "Hay personas que suman luz sin darse cuenta. Tú eres una.",
+    "Cada risa compartida es una semilla que sigue dando flores.",
+    "Tener con quién reírse de la vida es tener de todo.",
+    "Eres de esas amistades que no necesitan explicación, solo presencia.",
+    "Que este día florezca tan lindo como lo haces tú con los demás.",
+    "La distancia no marchita lo que de verdad importa.",
+    "Gracias por quedarte, incluso cuando no hacía falta.",
+    "Hay amistades que son jardín: no piden nada y dan todo.",
+    "Un buen día empieza recordando a la gente linda que uno tiene cerca.",
+    "Eres primavera en cualquier época del año.",
+    "Gracias por las charlas que curan sin que uno se dé cuenta.",
+    "Cada flor de este campo es un gracias por estar.",
+    "La vida es mejor con gente que te hace bien, como tú.",
+    "Que nunca falte una razón para brindar por la amistad.",
+    "Eres de las que hacen que valga la pena contar el día.",
+    "Gracias por sumar calidez a los días grises.",
+    "No todos los jardines se ven, pero el de la amistad siempre florece.",
+    "Feliz día de la primavera, para tí y para lo lindo que traes."
+  ];
+
+  function svgFlower(size){
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("viewBox", "0 0 100 160");
+    svg.setAttribute("width", size);
+    svg.setAttribute("height", size * 1.6);
+    svg.classList.add('flower');
+
+    svg.innerHTML = `
+      <line x1="50" y1="70" x2="50" y2="158" stroke="var(--stem)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M50 110 Q35 100 28 118" stroke="var(--stem)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g transform="translate(50,50)">
+        ${Array.from({length:8}).map((_,i) => `
+          <ellipse cx="0" cy="-22" rx="11" ry="22" fill="var(--petal)" stroke="var(--petal-deep)" stroke-width="1"
+            transform="rotate(${i*45})"/>
+        `).join('')}
+        <circle r="13" fill="var(--petal-deep)"/>
+      </g>
+    `;
+    return svg;
+  }
+
+  function addFlower(){
+    if (count >= MAX_FLORES) return;
+
+    const size = 46 + Math.random()*14;
+    const svg = svgFlower(size);
+
+    svg.style.animationDelay = (Math.random()*0.3) + 's, ' + (0.5 + Math.random()*1.5) + 's';
+
+    const wrap = document.createElement('button');
+    wrap.className = 'flower-wrap';
+    wrap.setAttribute('aria-label', 'Ver mensaje');
+    wrap.appendChild(svg);
+
+    const frase = frases[count % frases.length];
+    wrap.addEventListener('click', () => {
+      noteText.textContent = frase;
+      overlay.classList.add('open');
+    });
+
+    stage.appendChild(wrap);
+    count++;
+    caption.textContent = count + (count === 1 ? ' flor en el campo' : ' flores en el campo') + ' · máximo ' + MAX_FLORES;
+
+    if (count >= MAX_FLORES){
+      growBtn.disabled = true;
+      growBtn.textContent = 'El campo está completo';
+    }
+  }
+
+  for (let i = 0; i < 5; i++) addFlower();
+
+  growBtn.addEventListener('click', () => {
+    for (let i = 0; i < 3 && count < MAX_FLORES; i++) addFlower();
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') overlay.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
